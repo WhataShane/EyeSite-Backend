@@ -16,34 +16,27 @@ app.get('/', function (req, res) {
   res.send("You're not supposed to be here!")
 })
 
-app.post('/', function (req, res) {
+app.post('/', function async (req, res) {
   var sourceImage = req.body.srcs
   imageAnalysis = await GoogleCloudAnalysis(sourceImage[0])
   res.send(imageAnalysis)
 })
 
-
-
-
 async function GoogleCloudAnalysis (sourceImage) {
 
   var imageAnalysis = []
 
-  const result = await client.labelDetection(sourceImage)
-  .then(function(results) {
+  const result = await client.labelDetection(sourceImage) {
     var labels = results[0].labelAnnotations
     var objects = []
     for (i = 0; i < 2; i++){
       objects.push(labels[i].description)
     }
     imageAnalysis.push({objects: objects})
-  })
-  .catch(function(err) {
-    console.error('ERROR:', err)
-  })
+  }
 
-  const result2 = await client.faceDetection(sourceImage)
-  .then(function(results) {
+
+  const result2 = await client.faceDetection(sourceImage) {
     var faces = results[0].faceAnnotations
     imageAnalysis.push({numberOfPeople: Object.keys(faces).length})
     var numberOfHappyPeople = 0
@@ -78,56 +71,33 @@ async function GoogleCloudAnalysis (sourceImage) {
       imageAnalysis.push({numberOfAngeredPeople: numberOfAngeredPeople})
       }
     })
-  })
-    .catch(function(err) {
-      console.error('ERROR:', err)
-    })
+  }
 
-    .then(function(results){
-      console.log(imageAnalysis)
-      callback(imageAnalysis)
-    })
-
-  const result3 = await client.landmarkDetection(sourceImage)
-  .then(function(results) {
+  const result3 = await client.landmarkDetection(sourceImage){
    if (results[0].landmarkAnnotations[0]){
      imageAnalysis.push({nameOfLocation: results[0].landmarkAnnotations[0].description})
    }
-  })
-  .catch(function(err) {
-    console.error('ERROR:', err)
-  })
+  }
 
-  const result4 = await client.logoDetection(sourceImage)
-  .then(function(results) {
+
+  const result4 = await client.logoDetection(sourceImage) {
    if (results[0].logoAnnotations[0]){
      imageAnalysis.push({nameOfLogo: results[0].logoAnnotations[0].description})
    }
-  })
-  .catch(function(err) {
-    console.error('ERROR:', err)
-  })
+  }
 
 //WIP vvv
-  const result5 = await client.documentTextDetection(sourceImage)
-  .then(function(results) {
+  const result5 = await client.documentTextDetection(sourceImage) {
    if (results[0]){
 
    }
-  })
-  .catch(function(err) {
-    console.error('ERROR:', err)
-  })
+  }
 
-  const result6 = await client.imageProperties(sourceImage)
-  .then(function(results) {
+  const result6 = await client.imageProperties(sourceImage) {
    if (results[0]){
   //   console.log(results)
    }
-  })
-  .catch(function(err) {
-    console.error('ERROR:', err)
-  })
+  }
 
   return imageAnalysis
 
