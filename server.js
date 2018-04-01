@@ -18,15 +18,6 @@ app.get('/', function (req, res) {
 
 app.post('/', function (req, res) {
   var sourceImage = req.body.srcs
-
-  /*async getImageAnalysis()
-  {
-    imageAnalysis = []
-    const asyncGoogleCloudAnalysis = async GoogleCloudAnalysis(sourceImage[0])
-    await asyncGoogleCloudAnalysis();
-    return imageAnalysis;
-  }*/
-
   GoogleCloudAnalysis(sourceImage[0])
 
   res.send(sourceImage[0])
@@ -41,6 +32,9 @@ app.post('/', function (req, res) {
 })
 
 function GoogleCloudAnalysis (sourceImage, callback) {
+
+  var imageAnalysis = []
+
   client.labelDetection(sourceImage)
   .then(function(results) {
     var labels = results[0].labelAnnotations
@@ -55,6 +49,7 @@ function GoogleCloudAnalysis (sourceImage, callback) {
   })
 
   .then(function(results){
+
     client.faceDetection(sourceImage)
     .then(function(results) {
       var faces = results[0].faceAnnotations
@@ -98,8 +93,16 @@ function GoogleCloudAnalysis (sourceImage, callback) {
       console.error('ERROR:', err)
     })
 
+    .then(function(results){
+      console.log(imageAnalysis)
+      callback(imageAnalysis)
+    })
+
   }
   )
+
+
+
 
 
   client.landmarkDetection(sourceImage)
@@ -116,17 +119,17 @@ function GoogleCloudAnalysis (sourceImage, callback) {
   .then(function(results) {
    if (results[0].logoAnnotations[0]){
      imageAnalysis.push({nameOfLogo: results[0].logoAnnotations[0].description})
-     console.log(imageAnalysis)
    }
   })
   .catch(function(err) {
     console.error('ERROR:', err)
   })
 
+//WIP vvv
   client.documentTextDetection(sourceImage)
   .then(function(results) {
    if (results[0]){
-     console.log(results)
+
    }
   })
   .catch(function(err) {
@@ -136,7 +139,7 @@ function GoogleCloudAnalysis (sourceImage, callback) {
   client.imageProperties(sourceImage)
   .then(function(results) {
    if (results[0]){
-     console.log(results)
+  //   console.log(results)
    }
   })
   .catch(function(err) {
