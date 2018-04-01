@@ -18,13 +18,23 @@ app.get('/', function (req, res) {
 
 app.post('/', function (req, res) {
   var sourceImage = req.body.srcs
-  GoogleCloudAnalysis(sourceImage[0])
+
+  async getImageAnalysis()
+  {
+    imageAnalysis = []
+    const asyncGoogleCloudAnalysis = async GoogleCloudAnalysis(sourceImage[0])
+    await asyncGoogleCloudAnalysis();
+    return imageAnalysis;
+  }
+
   res.send(sourceImage[0])
 })
 
+
+
 function GoogleCloudAnalysis (sourceImage) {
 
-  imageAnalysis = []
+
 
   client.labelDetection(sourceImage)
   .then(function(results) {
@@ -81,8 +91,6 @@ function GoogleCloudAnalysis (sourceImage) {
   .catch(function(err) {
     console.error('ERROR:', err)
   })
-
-  return imageAnalysis
 }
 
 
