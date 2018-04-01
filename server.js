@@ -16,7 +16,7 @@ app.get('/', function (req, res) {
   res.send("You're not supposed to be here!")
 })
 
-app.post('/', function async (req, res) {
+app.post('/', async function (req, res) {
   var sourceImage = req.body.srcs
   imageAnalysis = await GoogleCloudAnalysis(sourceImage[0])
   res.send(imageAnalysis)
@@ -26,17 +26,16 @@ async function GoogleCloudAnalysis (sourceImage) {
 
   var imageAnalysis = []
 
-  const result = await client.labelDetection(sourceImage) {
+  const result = await client.labelDetection(sourceImage, function(results){
     var labels = results[0].labelAnnotations
     var objects = []
     for (i = 0; i < 2; i++){
       objects.push(labels[i].description)
     }
     imageAnalysis.push({objects: objects})
-  }
+  })
 
-
-  const result2 = await client.faceDetection(sourceImage) {
+  const result2 = await client.faceDetection(sourceImage, function(results){
     var faces = results[0].faceAnnotations
     imageAnalysis.push({numberOfPeople: Object.keys(faces).length})
     var numberOfHappyPeople = 0
@@ -71,33 +70,33 @@ async function GoogleCloudAnalysis (sourceImage) {
       imageAnalysis.push({numberOfAngeredPeople: numberOfAngeredPeople})
       }
     })
-  }
+  })
 
-  const result3 = await client.landmarkDetection(sourceImage){
+  const result3 = await client.landmarkDetection(sourceImage, function(results){
    if (results[0].landmarkAnnotations[0]){
      imageAnalysis.push({nameOfLocation: results[0].landmarkAnnotations[0].description})
    }
-  }
+ })
 
 
-  const result4 = await client.logoDetection(sourceImage) {
+  const result4 = await client.logoDetection(sourceImage, function(results) {
    if (results[0].logoAnnotations[0]){
      imageAnalysis.push({nameOfLogo: results[0].logoAnnotations[0].description})
    }
-  }
+ })
 
 //WIP vvv
-  const result5 = await client.documentTextDetection(sourceImage) {
+  const result5 = await client.documentTextDetection(sourceImage, function(results){
    if (results[0]){
 
    }
-  }
+ })
 
-  const result6 = await client.imageProperties(sourceImage) {
+  const result6 = await client.imageProperties(sourceImage, function(results){
    if (results[0]){
   //   console.log(results)
    }
-  }
+ })
 
   return imageAnalysis
 
