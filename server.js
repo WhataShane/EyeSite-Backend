@@ -40,7 +40,6 @@ async function GoogleCloudAnalysis (sourceImage) {
    console.error(error);
   }
 
-
   const result2 = await client.faceDetection(sourceImage)
   try {
   var faces = result2[0].faceAnnotations
@@ -106,7 +105,6 @@ async function GoogleCloudAnalysis (sourceImage) {
     console.error(error);
    }
 
-
   const result4 = await client.logoDetection(sourceImage)
   try {
   if (result4[0].logoAnnotations[0]){
@@ -150,5 +148,4 @@ async function GoogleCloudAnalysis (sourceImage) {
   }
 
   return imageAnalysis
-
 }
