@@ -1,6 +1,7 @@
 require('dotenv').config()
 var namer = require('color-namer')
 var vision = require('@google-cloud/vision')
+
 client = new vision.ImageAnnotatorClient()
 
 var express = require('express')
@@ -95,7 +96,6 @@ async function GoogleCloudAnalysis (sourceImage) {
     })} catch (error) {
      console.error(error);
     }
-
 
   const result3 = await client.landmarkDetection(sourceImage)
   try {
