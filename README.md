@@ -9,4 +9,4 @@ Eyesite is a Google Chrome Extension that takes the images displayed on webpages
 Through the Google Vision API, Eyesite describes description-less images. It identifies the objects in a given picture, it gauges how many people (if any) are in an image, it detects whether those people are happy/sad/angry/surprised, it identifies any famous landmarks, it identifies any logos, and it dictates all this information aloud back to the user. The
 extension also transcribes, then reads aloud, any text found within images.
 
-For the time being, installation requires an instance of a self-hosted back-end and a Google Vision API key, but the program will be streamlined in future versions.
+For the time being, installation requires an instance of a self-hosted back-end and a Google Vision API key, but the program will be streamlined in future versions. Stay posted!
